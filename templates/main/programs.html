@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}একাডেমিক প্রোগ্রাম - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-5">একাডেমিক প্রোগ্রামসমূহ</h1>
+    
+    {% if programs %}
+    <div class="row">
+        {% for program in programs %}
+        <div class="col-lg-6 mb-4">
+            <div class="card card-hover h-100">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">{{ program.title }}</h4>
+                </div>
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-3 text-muted">
+                        <i class="fas fa-book"></i> {{ program.get_program_type_display }}
+                    </h6>
+                    
+                    <p class="card-text">{{ program.description|linebreaks }}</p>
+                    
+                    <div class="mb-3">
+                        <h6><i class="far fa-clock"></i> কোর্স সময়কাল:</h6>
+                        <p>{{ program.duration }}</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6><i class="fas fa-user-check"></i> ভর্তির যোগ্যতা:</h6>
+                        <p>{{ program.eligibility|linebreaks }}</p>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="alert alert-info">
+                                <h6 class="mb-0">মোট আসন</h6>
+                                <h4 class="mb-0">{{ program.total_seats }}</h4>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="alert {% if program.is_active %}alert-success{% else %}alert-danger{% endif %}">
+                                <h6 class="mb-0">স্ট্যাটাস</h6>
+                                <h4 class="mb-0">
+                                    {% if program.is_active %}
+                                    চালু আছে
+                                    {% else %}
+                                    বন্ধ আছে
+                                    {% endif %}
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center">
+        <h4>এখনো কোন প্রোগ্রাম যোগ করা হয়নি</h4>
+        <p>অ্যাডমিন প্যানেলে গিয়ে প্রোগ্রাম যোগ করুন</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}যোগাযোগ - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-5">যোগাযোগ করুন</h1>
+    
+    <div class="row">
+        <div class="col-lg-6 mb-5">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-paper-plane"></i> বার্তা পাঠান</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{% url 'contact_submit' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="name" class="form-label">আপনার নাম *</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">ইমেইল ঠিকানা *</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label">ফোন নম্বর</label>
+                                <input type="tel" class="form-control" id="phone" name="phone">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">বিষয় *</label>
+                            <input type="text" class="form-control" id="subject" name="subject" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="message" class="form-label">আপনার বার্তা *</label>
+                            <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> বার্তা পাঠান
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6 mb-5">
+            <div class="card h-100">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0"><i class="fas fa-map-marker-alt"></i> আমাদের ঠিকানা</h4>
+                </div>
+                <div class="card-body">
+                    {% if institution %}
+                    <div class="mb-4">
+                        <h5><i class="fas fa-school"></i> প্রতিষ্ঠানের ঠিকানা</h5>
+                        <p class="mb-0">{{ institution.address|linebreaks }}</p>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h5><i class="fas fa-phone"></i> ফোন নম্বর</h5>
+                        <p class="mb-0">{{ institution.phone }}</p>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h5><i class="fas fa-envelope"></i> ইমেইল ঠিকানা</h5>
+                        <p class="mb-0">{{ institution.email }}</p>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-warning">
+                        প্রতিষ্ঠানের তথ্য এখনো যোগ করা হয়নি।
+                    </div>
+                    {% endif %}
+                    
+                    <hr>
+                    
+                    <div class="mt-4">
+                        <h5><i class="far fa-clock"></i> অফিস সময়</h5>
+                        <ul class="list-unstyled">
+                            <li>শনি - বৃহস্পতিবার: সকাল ৯টা - বিকাল ৫টা</li>
+                            <li>শুক্রবার: বন্ধ</li>
+                            <li>জুমার দিন: দর্শনার্থীদের জন্য বন্ধ</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header bg-info text-white">
+            <h4 class="mb-0"><i class="fas fa-map-marked-alt"></i> অবস্থান</h4>
+        </div>
+        <div class="card-body">
+            <div class="ratio ratio-16x9">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14020.041022003403!2d77.32550892496163!3d28.41000756320653!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cdc15c374c4a3%3A0x2acd4c8c4f4f4b4f!2sFaridabad%2C%20Haryana!5e0!3m2!1sen!2sin!4v1629876543210!5m2!1sen!2sin" 
+                        style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

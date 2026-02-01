@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+
+{% block title %}অভিভাবক ড্যাশবোর্ড - {{ student.name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <!-- বাম পাশ -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-user-circle"></i> ছাত্র তথ্য</h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        {% if student.photo %}
+                        <img src="{{ student.photo.url }}" alt="{{ student.name }}" 
+                             class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                        {% else %}
+                        <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center" 
+                             style="width: 150px; height: 150px;">
+                            <i class="fas fa-user fa-4x text-secondary"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <h5 class="text-center">{{ student.name }}</h5>
+                    <table class="table table-sm">
+                        <tr>
+                            <th>রোল নং:</th>
+                            <td>{{ student.roll_number }}</td>
+                        </tr>
+                        <tr>
+                            <th>শ্রেণী:</th>
+                            <td>{{ student.class_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>বিভাগ:</th>
+                            <td>{{ student.section }}</td>
+                        </tr>
+                        <tr>
+                            <th>পিতার নাম:</th>
+                            <td>{{ student.father_name }}</td>
+                        </tr>
+                    </table>
+                    
+                    <div class="d-grid mt-3">
+                        <a href="{% url 'guardian_logout' %}" class="btn btn-outline-danger">
+                            <i class="fas fa-sign-out-alt"></i> লগআউট
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-body">
+                    <h6><i class="fas fa-phone-alt"></i> যোগাযোগ</h6>
+                    <p class="mb-1"><strong>ছাত্র ফোন:</strong> {{ student.phone|default:"-" }}</p>
+                    <p class="mb-1"><strong>অভিভাবক ফোন:</strong> {{ student.guardian_phone }}</p>
+                    <p class="mb-0"><strong>অভিভাবক ইমেইল:</strong> {{ guardian.email }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ডান পাশ -->
+        <div class="col-md-8">
+            <!-- পরিসংখ্যান -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-chart-line"></i> একাডেমিক পরিসংখ্যান</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="text-muted">মোট পরীক্ষা</h6>
+                                    <h3 class="text-primary">{{ total_exams }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="text-muted">সর্বোচ্চ শতকরা</h6>
+                                    <h3 class="text-success">{{ max_percentage }}%</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="text-muted">সর্বোচ্চ গ্রেড</h6>
+                                    <h3>
+                                        {% if best_grade %}
+                                        <span class="badge bg-success">{{ best_grade }}</span>
+                                        {% else %}
+                                        <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="text-muted">সর্বোচ্চ ক্রম</h6>
+                                    <h3 class="text-info">
+                                        {% if best_position %}
+                                        {{ best_position }}
+                                        {% else %}
+                                        -
+                                        {% endif %}
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- রেজাল্ট লিস্ট -->
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-list-alt"></i> সকল পরীক্ষার রেজাল্ট</h5>
+                </div>
+                <div class="card-body">
+                    {% if result_summaries %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>পরীক্ষার নাম</th>
+                                    <th>তারিখ</th>
+                                    <th class="text-center">শতকরা</th>
+                                    <th class="text-center">গ্রেড</th>
+                                    <th class="text-center">ক্রিয়া</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for summary in result_summaries %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ summary.exam.name }}</td>
+                                    <td>{{ summary.exam.exam_date|date:"d/m/Y" }}</td>
+                                    <td class="text-center">
+                                        <span class="badge bg-{% if summary.percentage >= 80 %}success{% elif summary.percentage >= 60 %}info{% elif summary.percentage >= 40 %}warning{% else %}danger{% endif %}">
+                                            {{ summary.percentage }}%
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-{% if summary.grade == 'A+' or summary.grade == 'A' %}success{% elif summary.grade == 'B' %}info{% elif summary.grade == 'C' %}warning{% elif summary.grade == 'D' %}warning{% else %}danger{% endif %}">
+                                            {{ summary.grade }}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{% url 'result_view' summary.id %}" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye"></i> দেখুন
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info text-center py-5">
+                        <h4><i class="fas fa-info-circle"></i> কোন রেজাল্ট পাওয়া যায়নি</h4>
+                        <p>আপনার সন্তানের কোন পরীক্ষার রেজাল্ট এখনো আপলোড করা হয়নি।</p>
+                        <p class="mb-0">অফিসে যোগাযোগ করুন।</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- পারফরম্যান্স টেবিল -->
+            {% if performance_data %}
+            <div class="card">
+                <div class="card-header bg-warning">
+                    <h5 class="mb-0"><i class="fas fa-chart-bar"></i> পারফরম্যান্স সারসংক্ষেপ</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-warning">
+                                <tr>
+                                    <th>পরীক্ষা</th>
+                                    <th>শতকরা</th>
+                                    <th>গ্রেড</th>
+                                    <th>ক্রম</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in performance_data %}
+                                <tr>
+                                    <td>{{ item.exam }}</td>
+                                    <td class="text-center">
+                                        <span class="badge bg-{% if item.percentage >= 80 %}success{% elif item.percentage >= 60 %}info{% elif item.percentage >= 40 %}warning{% else %}danger{% endif %}">
+                                            {{ item.percentage }}%
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-{% if item.grade == 'A+' or item.grade == 'A' %}success{% elif item.grade == 'B' %}info{% elif item.grade == 'C' %}warning{% elif item.grade == 'D' %}warning{% else %}danger{% endif %}">
+                                            {{ item.grade }}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        {% if item.position %}
+                                        <span class="badge bg-info">{{ item.position }}</span>
+                                        {% else %}
+                                        <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

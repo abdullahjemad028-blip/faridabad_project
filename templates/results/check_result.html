@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}রেজাল্ট চেক করুন - জামিয়া আরাবিয়া ইমদাদুল উলুম ফারিদাবাদ{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="fas fa-search"></i> রেজাল্ট চেক করুন</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{% url 'check_result' %}">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="roll_number" class="form-label">রোল নম্বর *</label>
+                            <input type="text" class="form-control" id="roll_number" name="roll_number" 
+                                   placeholder="আপনার রোল নম্বর লিখুন" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="exam" class="form-label">পরীক্ষা নির্বাচন করুন *</label>
+                            <select class="form-control" id="exam" name="exam" required>
+                                <option value="">-- পরীক্ষা নির্বাচন করুন --</option>
+                                {% for exam in exams %}
+                                <option value="{{ exam.id }}">
+                                    {{ exam.name }} ({{ exam.academic_year }}) - {{ exam.class_name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="dob" class="form-label">জন্ম তারিখ (ঐচ্ছিক)</label>
+                            <input type="date" class="form-control" id="dob" name="dob">
+                            <small class="text-muted">জন্ম তারিখ দিলে নিরাপত্তা বাড়বে</small>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-search"></i> রেজাল্ট দেখুন
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="text-center">
+                        <p class="mb-2">অভিভাবক হিসাবে লগইন করতে চান?</p>
+                        <a href="{% url 'guardian_login' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-user-friends"></i> অভিভাবক লগইন
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="card-footer">
+                    <div class="alert alert-warning mb-0">
+                        <h6><i class="fas fa-exclamation-triangle"></i> নির্দেশনা:</h6>
+                        <ul class="mb-0">
+                            <li>রোল নম্বর সঠিকভাবে লিখুন</li>
+                            <li>পরীক্ষা সঠিকভাবে নির্বাচন করুন</li>
+                            <li>রেজাল্টে সমস্যা হলে অফিসে যোগাযোগ করুন</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ notice.title }} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- নোটিশ ডিটেইল -->
+            <div class="card {% if notice.is_important %}border-danger{% endif %}">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-4">
+                        <div>
+                            <h1 class="card-title mb-2">
+                                {% if notice.is_important %}
+                                <span class="badge bg-danger me-2">গুরুত্বপূর্ণ</span>
+                                {% endif %}
+                                {{ notice.title }}
+                            </h1>
+                            <h6 class="card-subtitle text-muted">
+                                <i class="far fa-calendar"></i> প্রকাশের তারিখ: {{ notice.date_posted|date:"d F Y, h:i A" }}
+                            </h6>
+                        </div>
+                        
+                        {% if notice.file %}
+                        <a href="{{ notice.file.url }}" class="btn btn-primary" download>
+                            <i class="fas fa-download"></i> ফাইল ডাউনলোড
+                        </a>
+                        {% endif %}
+                    </div>
+                    
+                    <hr>
+                    
+                    <!-- নোটিশ কন্টেন্ট -->
+                    <div class="card-text mb-5">
+                        {{ notice.content|linebreaks }}
+                    </div>
+                    
+                    <hr>
+                    
+                    <!-- নোটিশ মেটা তথ্য -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6><i class="far fa-calendar-check"></i> বৈধতা তথ্য</h6>
+                                    <p class="mb-0">
+                                        <strong>প্রকাশ:</strong> {{ notice.date_posted|date:"d F Y" }}<br>
+                                        <strong>বৈধতা:</strong> {{ notice.valid_until|date:"d F Y" }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6><i class="fas fa-info-circle"></i> নোটিশ তথ্য</h6>
+                                    <p class="mb-0">
+                                        <strong>স্ট্যাটাস:</strong> 
+                                        {% if notice.is_important %}
+                                        <span class="badge bg-danger">গুরুত্বপূর্ণ</span>
+                                        {% else %}
+                                        <span class="badge bg-secondary">সাধারণ</span>
+                                        {% endif %}
+                                        <br>
+                                        {% if notice.file %}
+                                        <strong>সংযুক্তি:</strong> <span class="badge bg-success">হ্যাঁ</span>
+                                        {% else %}
+                                        <strong>সংযুক্তি:</strong> <span class="badge bg-secondary">না</span>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-footer text-muted text-center">
+                    <small>
+                        জামিয়া আরাবিয়া ইমদাদুল উলুম ফারিদাবাদ - নোটিশ নং: {{ notice.id }}
+                    </small>
+                </div>
+            </div>
+            
+            <!-- নেভিগেশন বাটন -->
+            <div class="mt-4 d-flex justify-content-between">
+                <a href="{% url 'all_notices' %}" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left"></i> সব নোটিশে ফিরে যান
+                </a>
+                
+                <div>
+                    <a href="{% url 'home' %}" class="btn btn-outline-secondary me-2">
+                        <i class="fas fa-home"></i> হোম
+                    </a>
+                    <button onclick="window.print()" class="btn btn-outline-info">
+                        <i class="fas fa-print"></i> প্রিন্ট করুন
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card.border-danger {
+        border-width: 3px;
+    }
+    
+    @media print {
+        .navbar, .footer, .btn {
+            display: none !important;
+        }
+        
+        .card {
+            border: 1px solid #000 !important;
+        }
+    }
+</style>
+{% endblock %}

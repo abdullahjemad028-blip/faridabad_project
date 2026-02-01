@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}বার্তা পাঠানো সফল - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card text-center">
+                <div class="card-body py-5">
+                    <div class="mb-4">
+                        <i class="fas fa-check-circle fa-5x text-success"></i>
+                    </div>
+                    <h2 class="card-title mb-4">আপনার বার্তা সফলভাবে পাঠানো হয়েছে!</h2>
+                    <p class="card-text mb-4">
+                        জামিয়া আরাবিয়া ইমদাদুল উলুম ফারিদাবাদে যোগাযোগ করার জন্য আপনাকে ধন্যবাদ। 
+                        আমরা দ্রুত আপনার বার্তার উত্তর দেব ইনশাআল্লাহ।
+                    </p>
+                    <div class="mt-4">
+                        <a href="{% url 'home' %}" class="btn btn-primary me-2">
+                            <i class="fas fa-home"></i> হোমপেজে ফিরে যান
+                        </a>
+                        <a href="{% url 'contact' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-paper-plane"></i> আরেকটি বার্তা পাঠান
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

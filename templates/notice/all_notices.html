@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+
+{% block title %}নোটিশ বোর্ড - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-5">নোটিশ বোর্ড</h1>
+    
+    <!-- নোটিশ ফিল্টার -->
+    <div class="row mb-5">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">ফিল্টার</h5>
+                    <div class="list-group">
+                        <a href="{% url 'all_notices' %}" 
+                           class="list-group-item list-group-item-action {% if not request.GET.filter %}active{% endif %}">
+                            সব নোটিশ
+                        </a>
+                        <a href="{% url 'all_notices' %}?filter=important" 
+                           class="list-group-item list-group-item-action {% if request.GET.filter == 'important' %}active{% endif %}">
+                            গুরুত্বপূর্ণ নোটিশ
+                        </a>
+                        <a href="{% url 'all_notices' %}?filter=recent" 
+                           class="list-group-item list-group-item-action {% if request.GET.filter == 'recent' %}active{% endif %}">
+                            গত ৭ দিনের নোটিশ
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ইভেন্টস সাইডবার -->
+            <div class="card mt-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="far fa-calendar-check"></i> আসন্ন ইভেন্ট</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        <a href="{% url 'events' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-arrow-right"></i> সব ইভেন্ট দেখুন
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- নোটিশ লিস্ট -->
+        <div class="col-md-8">
+            {% if notices %}
+            {% for notice in notices %}
+            <div class="card mb-4 {% if notice.is_important %}border-danger{% endif %}">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h5 class="card-title">
+                                {% if notice.is_important %}
+                                <span class="badge bg-danger me-2">গুরুত্বপূর্ণ</span>
+                                {% endif %}
+                                {{ notice.title }}
+                            </h5>
+                            <h6 class="card-subtitle text-muted">
+                                <i class="far fa-calendar"></i> প্রকাশ: {{ notice.date_posted|date:"d F Y, h:i A" }}
+                            </h6>
+                        </div>
+                        {% if notice.file %}
+                        <a href="{{ notice.file.url }}" class="btn btn-sm btn-outline-primary" download>
+                            <i class="fas fa-download"></i> ডাউনলোড
+                        </a>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="card-text mb-4">
+                        {{ notice.content|linebreaks }}
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <small class="text-muted">
+                                <i class="far fa-calendar-check"></i> বৈধতা: {{ notice.valid_until|date:"d F Y" }}
+                            </small>
+                        </div>
+                        <div>
+                            {% if notice.is_important %}
+                            <span class="badge bg-danger">অবশ্যই দেখুন</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="card">
+                <div class="card-body text-center py-5">
+                    <i class="far fa-bell-slash fa-4x text-muted mb-3"></i>
+                    <h4>কোন নোটিশ পাওয়া যায়নি</h4>
+                    <p class="text-muted">এখনো কোন নোটিশ প্রকাশ করা হয়নি।</p>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- পেজিনেশন -->
+            {% if notices.has_other_pages %}
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if notices.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ notices.previous_page_number }}{% if request.GET.filter %}&filter={{ request.GET.filter }}{% endif %}">
+                            পূর্বের
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for i in notices.paginator.page_range %}
+                    {% if notices.number == i %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ i }}</span>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ i }}{% if request.GET.filter %}&filter={{ request.GET.filter }}{% endif %}">{{ i }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                    
+                    {% if notices.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ notices.next_page_number }}{% if request.GET.filter %}&filter={{ request.GET.filter }}{% endif %}">
+                            পরের
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .card.border-danger {
+        border-width: 2px;
+    }
+    
+    .list-group-item.active {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block title %}ইভেন্টসমূহ - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-5">ইভেন্টসমূহ</h1>
+    
+    <!-- আসন্ন ইভেন্ট -->
+    <div class="mb-5">
+        <h2 class="mb-4 text-success"><i class="far fa-calendar-check"></i> আসন্ন ইভেন্টসমূহ</h2>
+        
+        {% if upcoming_events %}
+        <div class="row">
+            {% for event in upcoming_events %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card card-hover h-100 border-success">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">{{ event.title|truncatechars:40 }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">{{ event.description|truncatechars:150 }}</p>
+                        
+                        <div class="mb-3">
+                            <p class="mb-1">
+                                <i class="far fa-calendar"></i> 
+                                <strong>তারিখ:</strong> {{ event.event_date|date:"d F Y" }}
+                            </p>
+                            <p class="mb-1">
+                                <i class="far fa-clock"></i> 
+                                <strong>সময়:</strong> {{ event.event_time|time:"h:i A" }}
+                            </p>
+                            <p class="mb-0">
+                                <i class="fas fa-map-marker-alt"></i> 
+                                <strong>স্থান:</strong> {{ event.venue|truncatechars:40 }}
+                            </p>
+                        </div>
+                        
+                        <div class="alert alert-success small mb-0">
+                            <i class="fas fa-info-circle"></i> 
+                            এই ইভেন্টটি সক্রিয় আছে
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="card">
+            <div class="card-body text-center py-5">
+                <i class="far fa-calendar-times fa-4x text-muted mb-3"></i>
+                <h4>কোন আসন্ন ইভেন্ট নেই</h4>
+                <p class="text-muted">এখনো কোন আসন্ন ইভেন্ট যোগ করা হয়নি।</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <!-- অতীত ইভেন্ট -->
+    <div>
+        <h2 class="mb-4 text-secondary"><i class="far fa-calendar-minus"></i> অতীত ইভেন্টসমূহ</h2>
+        
+        {% if past_events %}
+        <div class="accordion" id="pastEventsAccordion">
+            {% for event in past_events %}
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading{{ event.id }}">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                            data-bs-target="#collapse{{ event.id }}" aria-expanded="false" 
+                            aria-controls="collapse{{ event.id }}">
+                        <div class="d-flex w-100 justify-content-between align-items-center">
+                            <span>{{ event.title }}</span>
+                            <span class="badge bg-secondary me-2">
+                                {{ event.event_date|date:"d M Y" }}
+                            </span>
+                        </div>
+                    </button>
+                </h2>
+                <div id="collapse{{ event.id }}" class="accordion-collapse collapse" 
+                     aria-labelledby="heading{{ event.id }}" data-bs-parent="#pastEventsAccordion">
+                    <div class="accordion-body">
+                        <p>{{ event.description|linebreaks }}</p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="mb-1"><strong>তারিখ:</strong> {{ event.event_date|date:"d F Y" }}</p>
+                                <p class="mb-1"><strong>সময়:</strong> {{ event.event_time|time:"h:i A" }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="mb-0"><strong>স্থান:</strong> {{ event.venue }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="card">
+            <div class="card-body text-center py-5">
+                <i class="far fa-calendar-times fa-4x text-muted mb-3"></i>
+                <h4>কোন অতীত ইভেন্ট নেই</h4>
+                <p class="text-muted">এখনো কোন ইভেন্ট সমাপ্ত হয়নি।</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .card-hover {
+        transition: transform 0.3s;
+    }
+    
+    .card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    
+    .accordion-button:not(.collapsed) {
+        background-color: #f8f9fa;
+        color: #000;
+    }
+</style>
+{% endblock %}

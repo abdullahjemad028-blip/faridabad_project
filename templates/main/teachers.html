@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}শিক্ষকবৃন্দ - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-5">আমাদের শিক্ষকবৃন্দ</h1>
+    
+    {% if teachers %}
+    <div class="row">
+        {% for teacher in teachers %}
+        <div class="col-md-4 mb-4">
+            <div class="card card-hover h-100">
+                {% if teacher.photo %}
+                <img src="{{ teacher.photo.url }}" class="card-img-top" alt="{{ teacher.name }}" style="height: 250px; object-fit: cover;">
+                {% else %}
+                <div class="text-center py-5 bg-light">
+                    <i class="fas fa-user-tie fa-5x text-secondary"></i>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ teacher.name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ teacher.designation }}</h6>
+                    
+                    <div class="mb-3">
+                        <h6>শিক্ষাগত যোগ্যতা:</h6>
+                        <p class="card-text small">{{ teacher.qualifications|truncatechars:150 }}</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6>অভিজ্ঞতা:</h6>
+                        <p class="card-text small">{{ teacher.experience|truncatechars:150 }}</p>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-6">
+                            <small class="text-muted">
+                                <i class="far fa-calendar"></i> {{ teacher.joining_date|date:"M Y" }}
+                            </small>
+                        </div>
+                        <div class="col-6 text-end">
+                            <span class="badge {% if teacher.is_active %}bg-success{% else %}bg-secondary{% endif %}">
+                                {% if teacher.is_active %}বর্তমান{% else %}সাবেক{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    {% if teacher.email or teacher.phone %}
+                    <hr>
+                    <div class="small">
+                        {% if teacher.email %}
+                        <p class="mb-1"><i class="fas fa-envelope"></i> {{ teacher.email }}</p>
+                        {% endif %}
+                        {% if teacher.phone %}
+                        <p class="mb-0"><i class="fas fa-phone"></i> {{ teacher.phone }}</p>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center">
+        <h4>এখনো কোন শিক্ষকের তথ্য যোগ করা হয়নি</h4>
+        <p>অ্যাডমিন প্যানেলে গিয়ে শিক্ষকদের তথ্য যোগ করুন</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}রেজাল্ট সিস্টেম - জামিয়া আরাবিয়া ইমদাদুল উলুম ফারিদাবাদ{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <h1 class="display-5 mb-0">
+                        <i class="fas fa-graduation-cap"></i> অনলাইন রেজাল্ট সিস্টেম
+                    </h1>
+                    <p class="lead mb-0">জামিয়া আরাবিয়া ইমদাদুল উলুম ফারিদাবাদ</p>
+                </div>
+                
+                <div class="card-body p-5">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 border-primary">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-search fa-4x text-primary mb-3"></i>
+                                    <h3 class="card-title">রেজাল্ট চেক করুন</h3>
+                                    <p class="card-text">রোল নম্বর দিয়ে আপনার রেজাল্ট দেখুন</p>
+                                    <a href="{% url 'check_result' %}" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-search"></i> রেজাল্ট চেক
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 border-success">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-user-friends fa-4x text-success mb-3"></i>
+                                    <h3 class="card-title">অভিভাবক লগইন</h3>
+                                    <p class="card-text">অভিভাবক হিসাবে লগইন করুন</p>
+                                    <a href="{% url 'guardian_login' %}" class="btn btn-success btn-lg">
+                                        <i class="fas fa-sign-in-alt"></i> অভিভাবক লগইন
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-5">
+                        <h3 class="text-center mb-4"><i class="fas fa-info-circle"></i> নির্দেশনা</h3>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5><i class="fas fa-1"></i> রোল নম্বর দিন</h5>
+                                        <p class="small">আপনার রোল নম্বর সঠিকভাবে লিখুন</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5><i class="fas fa-2"></i> পরীক্ষা নির্বাচন করুন</h5>
+                                        <p class="small">কোন পরীক্ষার রেজাল্ট দেখতে চান তা নির্বাচন করুন</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5><i class="fas fa-3"></i> রেজাল্ট দেখুন</h5>
+                                        <p class="small">রেজাল্ট দেখুন এবং প্রিন্ট করুন</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info mt-4">
+                        <h5><i class="fas fa-exclamation-circle"></i> গুরুত্বপূর্ণ তথ্য</h5>
+                        <ul class="mb-0">
+                            <li>রেজাল্টে কোন সমস্যা দেখা দিলে অফিসে যোগাযোগ করুন</li>
+                            <li>রেজাল্ট কার্ডের হার্ড কপি সংগ্রহ করুন</li>
+                            <li>অভিভাবক লগইন করার জন্য অফিস থেকে ব্যবহারকারী নাম ও পাসওয়ার্ড নিন</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

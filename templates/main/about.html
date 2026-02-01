@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}প্রতিষ্ঠান পরিচিতি - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h1 class="text-center mb-5">প্রতিষ্ঠান পরিচিতি</h1>
+            
+            {% if institution %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="card-title">{{ institution.name }}</h3>
+                    <p class="arabic-text" style="font-size: 1.2rem; text-align: center; margin-bottom: 20px;">
+                        جامعہ عربیہ امداد العلوم فرید آباد
+                    </p>
+                    <p><strong>প্রতিষ্ঠাকাল:</strong> {{ institution.established_date|date:"d F Y" }}</p>
+                    <p><strong>ঠিকানা:</strong> {{ institution.address }}</p>
+                    <p><strong>ফোন:</strong> {{ institution.phone }}</p>
+                    <p><strong>ইমেইল:</strong> {{ institution.email }}</p>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-history"></i> প্রতিষ্ঠানের ইতিহাস</h4>
+                </div>
+                <div class="card-body">
+                    <p>{{ institution.history|linebreaks }}</p>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-success text-white">
+                            <h4 class="mb-0"><i class="fas fa-bullseye"></i> আমাদের মিশন</h4>
+                        </div>
+                        <div class="card-body">
+                            <p>{{ institution.mission|linebreaks }}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-info text-white">
+                            <h4 class="mb-0"><i class="fas fa-eye"></i> আমাদের ভিশন</h4>
+                        </div>
+                        <div class="card-body">
+                            <p>{{ institution.vision|linebreaks }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h4 class="mb-0"><i class="fas fa-info-circle"></i> প্রতিষ্ঠান সম্পর্কে</h4>
+                </div>
+                <div class="card-body">
+                    <p>{{ institution.description|linebreaks }}</p>
+                </div>
+            </div>
+            {% else %}
+            <div class="alert alert-warning">
+                প্রতিষ্ঠানের তথ্য এখনো যোগ করা হয়নি। অ্যাডমিন প্যানেলে গিয়ে প্রতিষ্ঠানের তথ্য যোগ করুন।
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -8,6 +8,7 @@ urlpatterns = [
     path('', include('main.urls')),
     path('gallery/', include('gallery.urls')),
     path('notice/', include('notice.urls')),
+    path('results/', include('results.urls')),
 ]
 
 if settings.DEBUG:
@@ -20,4 +21,3 @@ admin.site.index_title = "স্বাগতম এডমিন প্যান�
 
 
 
-path('results/', include('results.urls')),

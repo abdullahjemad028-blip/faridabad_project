@@ -1,166 +1,152 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
-<!-- হিরো সেকশন -->
-<section class="hero-section text-center">
-    <div class="container">
-        <h1 class="display-4 mb-4">জামিয়া আরাবিয়া ইমদাদুল উলুম ফারিদাবাদ</h1>
-        <p class="lead mb-4">ইলমে নববীর আলোকিত প্রতিষ্ঠান</p>
-        <p class="arabic-text" style="font-size: 1.5rem; margin-bottom: 30px;">
-            جامعہ عربیہ امداد العلوم فرید آباد
-        </p>
-        <a href="{% url 'about' %}" class="btn btn-primary btn-lg">প্রতিষ্ঠান পরিচিতি</a>
-        <a href="{% url 'programs' %}" class="btn btn-outline-light btn-lg">একাডেমিক প্রোগ্রাম</a>
-    </div>
-</section>
 
-<!-- নোটিশ সেকশন -->
-<section class="py-5 bg-light">
-    <div class="container">
-        <h2 class="text-center mb-5"><i class="fas fa-bullhorn"></i> সর্বশেষ নোটিশ</h2>
-        
-        <div class="row">
-            {% for notice in notices %}
-            <div class="col-md-4 mb-4">
-                <div class="card card-hover {% if notice.is_important %}notice-important{% endif %}">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            {% if notice.is_important %}
-                            <span class="badge bg-danger">গুরুত্বপূর্ণ</span>
-                            {% endif %}
-                            {{ notice.title }}
-                        </h5>
-                        <p class="card-text">{{ notice.content|truncatechars:150 }}</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <small class="text-muted">
-                                <i class="far fa-calendar"></i> {{ notice.date_posted|date:"d M Y" }}
-                            </small>
-                            <a href="#" class="btn btn-sm btn-outline-primary">বিস্তারিত</a>
-                        </div>
+<style>
+    /* হাটহাজারী মাদ্রাসা স্টাইল কাস্টমাইজেশন */
+    body { background-color: #f0f2f5; }
+    
+    .main-container {
+        background: #fff;
+        padding: 20px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.05);
+        margin-top: 20px;
+        border-radius: 5px;
+    }
+
+    /* সংবাদ ও নোটিশ হেডার */
+    .section-header-box {
+        background: #000;
+        color: #fff;
+        padding: 10px;
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 15px;
+        border-radius: 3px 3px 0 0;
+    }
+
+    /* সংবাদ কার্ড স্টাইল */
+    .news-card {
+        border: 1px solid #ddd;
+        background: #fff;
+        transition: 0.3s;
+        height: 100%;
+    }
+    .news-card:hover { border-color: #004d26; }
+    .news-body { padding: 10px; background: #e9ecef; }
+    .news-title { font-size: 0.95rem; font-weight: 600; color: #333; }
+    .news-date { font-size: 0.8rem; color: #666; }
+
+    /* ডানপাশের নোটিশ বোর্ড (Hathazari Style) */
+    .notice-list-container {
+        background: #004d26;
+        padding: 2px;
+        border-radius: 4px;
+    }
+    .notice-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 15px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        color: #fff;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+    .notice-row:hover { background: rgba(255,255,255,0.1); color: #d4af37; }
+    .notice-row:last-child { border-bottom: none; }
+    .notice-date-badge {
+        font-size: 0.75rem;
+        text-align: center;
+        line-height: 1.2;
+        min-width: 45px;
+        border-left: 1px solid rgba(255,255,255,0.3);
+        padding-left: 10px;
+    }
+
+    /* বাটন স্টাইল */
+    .btn-dark-custom {
+        background: #333;
+        color: #fff;
+        border: none;
+        padding: 8px 25px;
+        font-size: 0.9rem;
+        border-radius: 4px;
+    }
+</style>
+
+<div class="container main-container">
+    <div class="row mb-5 align-items-center">
+        <div class="col-md-5">
+            <div id="madrasaCarousel" class="carousel slide shadow-sm" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="{% static 'bg.png' %}" class="d-block w-100" alt="Jamia Photo" style="height: 300px; object-fit: cover;">
                     </div>
                 </div>
             </div>
-            {% endfor %}
         </div>
-        
-        <div class="text-center mt-4">
-            <a href="{% url 'all_notices' %}" class="btn btn-primary">সকল নোটিশ দেখুন</a>
+        <div class="col-md-7 px-4">
+            <h3 style="color: #004d26; font-weight: 700;">দারুল উলুম ফারিদাবাদ-এর সংক্ষিপ্ত পরিচিতি</h3>
+            <p class="text-muted" style="text-align: justify; line-height: 1.8;">
+                আল-জামিয়াতুল আরাবিয়া ইমদাদুল উলুম ফারিদাবাদ ঢাকা-র অন্যতম বৃহৎ ও ঐতিহ্যবাহী একটি ইসলামী শিক্ষা প্রতিষ্ঠান। 
+                প্রতিষ্ঠানটি দীর্ঘ সময় ধরে দ্বীনি শিক্ষা ও সুন্নাহর প্রচারে কাজ করে যাচ্ছে। দক্ষ শিক্ষক ও উন্নত পাঠদানের মাধ্যমে 
+                এখানে হাজার হাজার ছাত্র শিক্ষা লাভ করছে...
+            </p>
+            <a href="{% url 'about' %}" class="btn btn-dark-custom">বিস্তারিত</a>
         </div>
     </div>
-</section>
 
-<!-- প্রোগ্রাম সেকশন -->
-<section class="py-5">
-    <div class="container">
-        <h2 class="text-center mb-5"><i class="fas fa-graduation-cap"></i> আমাদের প্রোগ্রামসমূহ</h2>
-        
-        <div class="row">
-            {% for program in programs %}
-            <div class="col-md-6 mb-4">
-                <div class="card card-hover h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ program.title }}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">{{ program.get_program_type_display }}</h6>
-                        <p class="card-text">{{ program.description|truncatechars:200 }}</p>
-                        <div class="mb-3">
-                            <span class="badge bg-info">সময়কাল: {{ program.duration }}</span>
-                            <span class="badge bg-secondary">আসন: {{ program.total_seats }}</span>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="section-header-box">সংবাদ</div>
+            <div class="row g-3">
+                {% for program in programs|slice:":3" %}
+                <div class="col-md-4">
+                    <div class="news-card">
+                        <img src="{% static 'bg.png' %}" class="img-fluid" style="height: 120px; width: 100%; object-wrap: cover;">
+                        <div class="news-body">
+                            <div class="news-title mb-2">{{ program.title|truncatechars:40 }}</div>
+                            <div class="news-date"><i class="far fa-clock"></i> {{ program.duration }} বছর মেয়াদী</div>
                         </div>
-                        <p><strong>যোগ্যতা:</strong> {{ program.eligibility|truncatechars:100 }}</p>
                     </div>
                 </div>
+                {% empty %}
+                <p class="text-center py-4">বর্তমানে কোনো বিশেষ সংবাদ নেই</p>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
-        
-        <div class="text-center mt-4">
-            <a href="{% url 'programs' %}" class="btn btn-primary">সকল প্রোগ্রাম দেখুন</a>
-        </div>
-    </div>
-</section>
 
-
-<!-- হোমপেজের যেকোন জায়গায় (বস্নক সেকশনের শেষে) এই কোড যোগ করুন: -->
-
-<!-- রেজাল্ট সেকশন -->
-<section class="py-5 bg-light">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-6">
-                <h2><i class="fas fa-graduation-cap"></i> অনলাইন রেজাল্ট</h2>
-                <p class="lead">আপনার রেজাল্ট অনলাইনে দেখুন এবং ডাউনলোড করুন</p>
-                <ul>
-                    <li>রোল নম্বর দিয়ে রেজাল্ট চেক করুন</li>
-                    <li>অভিভাবক হিসাবে লগইন করুন</li>
-                    <li>সকল পরীক্ষার রেজাল্ট দেখুন</li>
-                </ul>
-                <a href="{% url 'result_home' %}" class="btn btn-primary btn-lg">
-                    <i class="fas fa-search"></i> রেজাল্ট চেক করুন
+        <div class="col-md-4">
+            <div class="section-header-box">নোটিশ</div>
+            <div class="notice-list-container shadow-sm">
+                {% for notice in notices|slice:":5" %}
+                <a href="#" class="notice-row">
+                    <span class="fw-500">{{ notice.title|truncatechars:50 }}</span>
+                    <div class="notice-date-badge">
+                        {{ notice.date_posted|date:"d" }}<br>
+                        <small>{{ notice.date_posted|date:"M" }}</small>
+                    </div>
                 </a>
-            </div>
-            <div class="col-md-6 text-center">
-                <i class="fas fa-chart-line fa-7x text-primary"></i>
+                {% empty %}
+                <div class="p-4 text-white text-center">কোন নোটিশ নেই</div>
+                {% endfor %}
             </div>
         </div>
     </div>
-</section>
 
-<!-- গ্যালারি সেকশন -->
-<section class="py-5 bg-light">
-    <div class="container">
-        <h2 class="text-center mb-5"><i class="fas fa-images"></i> গ্যালারি</h2>
-        
-        <div class="row">
-            {% for image in featured_images %}
-            <div class="col-md-4 col-lg-2 mb-4">
-                <div class="card card-hover">
-                    <img src="{{ image.image.url }}" class="card-img-top" alt="{{ image.title }}" style="height: 150px; object-fit: cover;">
-                    <div class="card-body p-2">
-                        <p class="card-text small mb-0">{{ image.title|truncatechars:30 }}</p>
-                    </div>
-                </div>
+    <div class="mt-5">
+        <div class="border-bottom border-dark border-2 mb-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold"><i class="fas fa-camera"></i> ছবি</h5>
+        </div>
+        <div class="row g-2">
+            {% for image in featured_images|slice:":4" %}
+            <div class="col-md-3 col-6">
+                <img src="{{ image.image.url }}" class="img-thumbnail" style="height: 150px; width: 100%; object-fit: cover;">
             </div>
             {% endfor %}
         </div>
-        
-        <div class="text-center mt-4">
-            <a href="{% url 'gallery' %}" class="btn btn-primary">সম্পূর্ণ গ্যালারি দেখুন</a>
-        </div>
     </div>
-</section>
+</div>
 
-<!-- ইভেন্টস সেকশন -->
-<section class="py-5">
-    <div class="container">
-        <h2 class="text-center mb-5"><i class="far fa-calendar-check"></i> আসন্ন ইভেন্টসমূহ</h2>
-        
-        <div class="row">
-            {% for event in events %}
-            <div class="col-md-4 mb-4">
-                <div class="card card-hover h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ event.title }}</h5>
-                        <p class="card-text">{{ event.description|truncatechars:150 }}</p>
-                        <div class="mb-3">
-                            <p class="mb-1"><i class="far fa-calendar"></i> তারিখ: {{ event.event_date|date:"d M Y" }}</p>
-                            <p class="mb-1"><i class="far fa-clock"></i> সময়: {{ event.event_time|time:"h:i A" }}</p>
-                            <p class="mb-0"><i class="fas fa-map-marker-alt"></i> স্থান: {{ event.venue }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% empty %}
-            <div class="col-12">
-                <div class="alert alert-info text-center">
-                    কোন আসন্ন ইভেন্ট নেই
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        
-        <div class="text-center mt-4">
-            <a href="{% url 'events' %}" class="btn btn-primary">সমস্ত ইভেন্ট দেখুন</a>
-        </div>
-    </div>
-</section>
 {% endblock %}
